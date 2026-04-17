@@ -68,3 +68,8 @@ uritemplate==4.2.0
 urllib3==2.6.3
 watchdog==6.0.0
 websockets==16.0
+streamlit
+google-genai
+pillow
+gtts
+python-dotenv
