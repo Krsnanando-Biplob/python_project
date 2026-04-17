@@ -6,7 +6,7 @@ from gtts import gTTS
 
 load_dotenv()
 
-api_key = os.getenv("GENERATE_API")  # FIXED
+api_key = os.getenv("GENARET_API")  # FIXED
 
 client = genai.Client(api_key=api_key)
 
@@ -17,7 +17,7 @@ def not_generator(images):
     use necessary markdown to separate sections and give answer in Bangla language."""
 
     res = client.models.generate_content(
-        model="gemini-1.5-flash",   # FIXED MODEL
+        model="gemini-3-flash-preview",   # FIXED MODEL
         contents=[prompt] + images   # FIXED INPUT ORDER
     )
 
@@ -61,8 +61,8 @@ D.
 **Answer:**"""
 
     res = client.models.generate_content(
-        model="gemini-1.5-flash",   # FIXED MODEL
+        model="gemini-3-flash-preview",   # FIXED MODEL
         contents=[prompt] + images
     )
-
-    return res.text
+    quize_text = res.text
+    return quize_text
