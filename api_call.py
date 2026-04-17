@@ -2,67 +2,59 @@ from google import genai
 from dotenv import load_dotenv
 import os
 import io
+import streamlit as st
 from gtts import gTTS
 
-load_dotenv()
 
-api_key = os.getenv("GENARET_API")  # FIXED
+load_dotenv()
+api_key = os.getenv("GEMENI_API")
 
 client = genai.Client(api_key=api_key)
 
 
-# ================= NOTE GENERATOR =================
+# not generate
 def not_generator(images):
-    prompt = """Summarize the picture in note format at max 100 words,
-    use necessary markdown to separate sections and give answer in Bangla language."""
-
+    promted = """Summarize the picture in note format at max 100 wogit, 
+    make sure to necessary markdown to differentiate section and give me ans bangla language"""
     res = client.models.generate_content(
-        model="gemini-3-flash-preview",   # FIXED MODEL
-        contents=[prompt] + images   # FIXED INPUT ORDER
+        model="gemini-3-flash-preview", contents=[images, promted]
     )
-
     return res.text
 
 
-# ================= AUDIO =================
 def audio_speech(text):
-    if not text:
-        return None
-
     speech = gTTS(text, lang="bn", slow=False)
 
+    # speech.save("wellcome.mp3")
     audio_buff = io.BytesIO()
     speech.write_to_fp(audio_buff)
-    audio_buff.seek(0)   # IMPORTANT FIX
-
     return audio_buff
 
 
-# ================= QUIZ GENERATOR =================
-def quize_generate(images, difficulty):
-    prompt = f"""Use Bangla language and analyze the uploaded image.
+def quize_generate(images, defficulty):
+    promted = f"""Use language bangla and  Analyze the uploaded image and identify the important concepts.
 
-Generate a quiz with {difficulty} difficulty.
+    Based on those concepts, generate a quiz with {defficulty} difficulty level.
 
-Rules:
-- 5 questions
-- Each question has 4 options (A, B, C, D)
-- Highlight correct answer
-- Focus only on image content
+    Rules:
+    - Generate 5 questions.
+    - Each question must have 4 options (A, B, C, D).
+    - Highlight the correct answer.
+    - Focus only on the important information from the image.
 
-Format:
+    Format the output using Markdown.
 
-### Question 1
-A.
-B.
-C.
-D.
+    ## Format
 
-**Answer:**"""
+    ### Question 1
+    A.  
+    B.  
+    C.  
+    D.  
 
+    **Answer:** 
+    """
     res = client.models.generate_content(
-        model="gemini-3-flash-preview",   # FIXED MODEL
-        contents=[prompt] + images
+        model="gemini-3-flash-preview", contents=[images, promted]
     )
-    quize_text = res.text
-    return quize_text
+    return res.text
